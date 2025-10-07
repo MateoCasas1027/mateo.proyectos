@@ -2,7 +2,7 @@ package controlador;
 
 import modelo.Paciente;
 import util.DatabaseUtil;
-import vista.Ventana; // Import corregido
+import vista.Ventana;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,14 +10,19 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class AutenticacionController {
-    private final Ventana ventana; // Campo final
-    private final DatabaseUtil database; // Campo final
+    private final Ventana ventana;
+    private final DatabaseUtil database;
     private Paciente pacienteActual;
+    private CitaController citaController;
 
     public AutenticacionController(Ventana ventana) {
         this.ventana = ventana;
         this.database = DatabaseUtil.getInstance();
         configurarEventos();
+    }
+
+    public void setCitaController(CitaController citaController) {
+        this.citaController = citaController;
     }
 
     private void configurarEventos() {
@@ -59,10 +64,75 @@ public class AutenticacionController {
             }
         });
 
+        ventana.getBtnMisCitas().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pacienteActual != null) {
+                    ventana.mostrarMisCitas();
+                    if (citaController != null) {
+                        citaController.cargarMisCitas();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(ventana, "Debe iniciar sesión primero");
+                }
+            }
+        });
+
+        ventana.getBtnReasignarCita().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pacienteActual != null) {
+                    ventana.mostrarReasignarCita();
+                    if (citaController != null) {
+                        citaController.cargarCitasParaReasignar();
+                        citaController.cargarFechasReasignacion();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(ventana, "Debe iniciar sesión primero");
+                }
+            }
+        });
+
+        ventana.getBtnCancelarCita().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pacienteActual != null) {
+                    ventana.mostrarCancelarCita();  // ✅ Esto debe llamar al panel correcto
+                    if (citaController != null) {
+                        citaController.cargarCitasParaCancelar();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(ventana, "Debe iniciar sesión primero");
+                }
+            }
+        });
+
         ventana.getBtnCerrarSesion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cerrarSesion();
+            }
+        });
+
+        // Eventos para volver al menú desde los nuevos paneles
+        ventana.getBtnVolverMenuMisCitas().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ventana.mostrarMenu();
+            }
+        });
+
+        ventana.getBtnVolverMenuReasignar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ventana.mostrarMenu();
+            }
+        });
+
+        ventana.getBtnVolverMenuCancelar().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ventana.mostrarMenu();
             }
         });
     }

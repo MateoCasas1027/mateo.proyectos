@@ -1,8 +1,9 @@
 package modelo;
 
+import java.io.Serializable; // <--- ¡Importante!
 import java.time.LocalDate;
 
-public class Paciente {
+public class Paciente implements Serializable { // <--- CLAVE
     private String id;
     private String password;
     private String nombre;

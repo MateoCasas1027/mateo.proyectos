@@ -1,6 +1,8 @@
 package modelo;
 
-public class Especialidad {
+import java.io.Serializable;
+
+public class Especialidad implements Serializable {
     private String id;
     private String nombre;
 

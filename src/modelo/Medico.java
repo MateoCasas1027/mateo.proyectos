@@ -1,6 +1,8 @@
 package modelo;
 
-public class Medico {
+import java.io.Serializable;
+
+public class Medico implements Serializable {
     private String id;
     private String nombre;
     private String apellido;

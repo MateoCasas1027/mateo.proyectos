@@ -1,8 +1,9 @@
 package modelo;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Cita {
+public class Cita implements Serializable {
     private String id;
     private Paciente paciente;
     private Medico medico;
